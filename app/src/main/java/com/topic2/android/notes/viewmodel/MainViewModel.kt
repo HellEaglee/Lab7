@@ -19,24 +19,21 @@ import kotlinx.coroutines.withContext
  * This view model is used for all screens.
  */
 class MainViewModel(private val repository: Repository) : ViewModel() {
-    val notesNotInTrash: LiveData<List<NoteModel>> by lazy {
-        repository.getAllNotesNotInTrash()
-    }
-
-    val notesInTrash by lazy { repository.getAllNotesInTrash() }
+    val notesNotInTrash: LiveData<List<NoteModel>> by lazy{ repository.getAllNotesNotInTrash() }
 
     private var _noteEntry = MutableLiveData(NoteModel())
     val noteEntry: LiveData<NoteModel> = _noteEntry
+
+    private var _selectedNotes = MutableLiveData<List<NoteModel>>(listOf())
+    val selectedNotes: LiveData<List<NoteModel>> = _selectedNotes
 
     val colors: LiveData<List<ColorModel>> by lazy {
         repository.getAllColors()
     }
 
-    private var _selectedNotes = MutableLiveData<List<NoteModel>>(listOf())
-    val selectedNotes: LiveData<List<NoteModel>> = _selectedNotes
-
     fun onCreateNewNoteClick() {
         // TODO - Open SaveNoteScreen
+        _noteEntry.value = NoteModel()
         NotesRouter.navigateTo(Screen.SaveNote)
     }
 
