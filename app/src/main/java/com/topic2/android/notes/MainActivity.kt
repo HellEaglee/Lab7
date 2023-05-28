@@ -4,11 +4,17 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.activity.compose.setContent
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.Surface
+import androidx.compose.runtime.Composable
+import com.topic2.android.notes.routing.NotesRouter
+import com.topic2.android.notes.routing.Screen
 import com.topic2.android.notes.theme.JetNotesTheme
 import com.topic2.android.notes.viewmodel.MainViewModel
 import com.topic2.android.notes.viewmodel.MainViewModelFactory
 import kotlinx.coroutines.DelicateCoroutinesApi
 import com.topic2.android.notes.util.screens.NotesScreen
+import com.topic2.android.notes.util.screens.SaveNoteScreen
 
 /**
  * Main activity приложения.
@@ -22,15 +28,26 @@ class MainActivity : AppCompatActivity() {
     )
   })
 
-
+  @ExperimentalMaterialApi()
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
 
     setContent {
       JetNotesTheme {
-        NotesScreen(viewModel = viewModel)
-
+        MainActivityScreen(viewModel = viewModel)
       }
+    }
+  }
+}
+
+@Composable
+@ExperimentalMaterialApi
+private fun MainActivityScreen(viewModel: MainViewModel){
+  Surface{
+    when (NotesRouter.currentScreen){
+      is Screen.Notes -> NotesScreen(viewModel)
+      is Screen.SaveNote -> SaveNoteScreen(viewModel)
+      is Screen.Trash -> Screen.Trash
     }
   }
 }
