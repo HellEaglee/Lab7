@@ -2,6 +2,7 @@ package com.topic2.android.notes.util.screens
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.clickable
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
@@ -46,6 +47,16 @@ fun SaveNoteScreen(viewModel: MainViewModel){
     val moveNoteToTrashDialogShownState: MutableState<Boolean> = rememberSaveable {
         mutableStateOf(false)
     }
+
+    BackHandler(
+        onBack = {
+            if(bottomDrawerState.isOpen){
+                coroutineScope.launch{ bottomDrawerState.close()}
+            } else{
+                NotesRouter.navigateTo(Screen.Notes)
+            }
+        }
+    )
 
     Scaffold(topBar = {
         val isEditingMode: Boolean = noteEntry.id != NEW_NOTE_ID
